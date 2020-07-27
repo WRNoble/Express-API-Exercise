@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const Emperor = new Schema({
   name: String,
   birth: String,
+  death: String,
   birthProvidence: String,
   rise: String,
   reignStart: String,
