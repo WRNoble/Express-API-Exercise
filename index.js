@@ -1,20 +1,34 @@
 const express = require("express");
-const data = require("./data");
 const app = express();
+const Emperor = require("./models/emperor-schema");
+const router = require("./routes/emperor.js");
+const cors = require("cors");
 
-//display the roman emperor as the page loads GET
-app.get("/", (request, response) => {
-  response.json(data);
+app.use(cors());
+
+app.use(express.json());
+app.use(router);
+
+//catch 404 errors
+app.use(function (req, res) {
+  let err = new Error("not found");
+  err.status = 404;
 });
 
-//allow the user to see only one Roman Emperor on a page /emperor/:id
-app.get("/emperor/:name", (request, response) => {
-  const emperor = data.fields.find(
-    (emperor) => emperor.fields.name == request.params.name
-  );
-  response.json(emperor);
+//error handler
+app.use(function (err, req, res) {
+  res.status(err.status || 500);
+  res.json({
+    error: {
+      message: err.message,
+    },
+  });
 });
 
-//allow for the user to update the api with PUT /emperor/:id
+app.set("port", process.env.PORT || 8080);
 
-app.listen(3000, () => console.log("Quote API listening on port 3000!"));
+app.listen(app.get("port"), () => {
+  console.log(`✅ PORT: ${app.get("port")} 🌟`);
+});
+
+app.listen(4000, () => console.log("listening on port 4000"));
